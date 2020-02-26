@@ -15,7 +15,7 @@ public class Card
 		public final String string;
 		public final char character;
 		
-		public Suit(String s, char c)
+		private Suit(String s, char c)
 		{
 			string = s;
 			character = c;
@@ -74,7 +74,7 @@ public class Card
 	
 	public String getFace()
 	{
-		return number;
+		return face;
 	}
 	
 	public Suit getSuit()
@@ -84,6 +84,6 @@ public class Card
 	
 	public String toString()
 	{
-		return face + " " + suit.char;
+		return face + " " + suit.character;
 	}
 }

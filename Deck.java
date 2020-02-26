@@ -7,9 +7,10 @@ public class Deck
 {
 	private ArrayList<Card> cards = new ArrayList<Card>(52);
 	
-	public Deck()
+	// Constructor(s)
+	public Deck() // Standard Deck
 	{
-		for(String suit : suits)
+		for(Card.Suit suit : Card.Suit.values())
 		{
 			for (int i = 1 ; i <= 13 ; i++)
 			{	
@@ -19,12 +20,17 @@ public class Deck
 	}
 	
 	//deal hand of a specified (not fixed) number of cards to four players
+	public Card deal()
+	{
+		return deal(1).get(0);
+	}
+	
 	public ArrayList<Card> deal(int numberOfCards)
 	{
 		if (numberOfCards > cards.size())
 		{
 			System.out.println("Hey! You can't do that! (Error in Deck > deal())");
-			return;
+			return null;
 		}
 		
 		ArrayList<Card> dealtCards = new ArrayList<Card>(numberOfCards);
@@ -47,14 +53,14 @@ public class Deck
 
 			do 
 			{ 
-				n = prng.nextInt(cards.length);
+				n = prng.nextInt(cards.size());
 			} 
 			while (n == i);
 
 			// Swap the cards
-			Card temp = cards[i];
-			cards[i] = cards[n];
-			cards[n] = temp;
+			Card temp = cards.get(i);
+			cards.set(i, cards.get(n));
+			cards.set(n, temp);
 		}
 	}
 	
