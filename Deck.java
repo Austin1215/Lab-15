@@ -3,45 +3,17 @@
 
 import java.util.*;
 
-public class Deck //holds cards
+public class Deck
 {
 	private ArrayList<Card> cards = new ArrayList<Card>(52);
 	
 	public Deck()
 	{
-		String[] suits = {"spades", "hearts", "diamonds", "clubs"};
-		
 		for(String suit : suits)
 		{
 			for (int i = 1 ; i <= 13 ; i++)
-			{
-				String face = "";
-				
-				switch(i)
-				{
-					case 1:
-						face = "A";
-						break;
-					
-					case 11:
-						face = "J";
-						break;
-						
-					case 12:
-						face = "Q";
-						break;
-							
-					case 13:
-						face = "K";
-						break;
-					
-					default:
-						face += i;
-						break;
-				}
-				
-				cards.add(new Card(face, suit));
-				
+			{	
+				cards.add(new Card(i, suit));	
 			}
 		}
 	}
@@ -68,26 +40,26 @@ public class Deck //holds cards
 	public void shuffle()
 	{
 		Random prng = new Random(); // Pringle
-		
-		for (int bridges = 0 ; bridges <= 7 ; bridges++) // 7 is absolutely arbitrary
+		for (int i = 0 ; i < cards.size() ; i++)
 		{
-			for (int i = 0 ; i < cards.size() ; i++)
-			{
-				// Making sure the random number is not the same as the current index
-				int n;
-				
-				while (n == i) n = prng.nextInt(cards.length);
-				
-				// Swap the cards
-				Card temp = cards[i];
-				cards[i] = cards[n];
-				cards[n] = temp;
-			}
+			// Making sure the random number is not the same as the current index
+			int n;
+
+			do 
+			{ 
+				n = prng.nextInt(cards.length);
+			} 
+			while (n == i);
+
+			// Swap the cards
+			Card temp = cards[i];
+			cards[i] = cards[n];
+			cards[n] = temp;
 		}
 	}
 	
 	public String toString()
 	{
-		return "DECK: holding " + cards.size() + " cards";
+		return "DECK: " + cards.size() + " cards";
 	}
 }
