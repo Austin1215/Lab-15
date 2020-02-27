@@ -29,7 +29,7 @@ public class Deck
 	{
 		if (numberOfCards > cards.size())
 		{
-			System.out.println("Hey! You can't do that! (Error in Deck > deal())");
+			System.out.println("Hey! You can't do that! (There aren\'t that many cards, you greedy pig)");
 			return null;
 		}
 		
@@ -64,8 +64,13 @@ public class Deck
 		}
 	}
 	
+	public int size()
+	{
+		return cards.size();
+	}
+	
 	public String toString()
 	{
-		return "DECK: " + cards.size() + " cards";
+		return "DECK: " + size() + " cards";
 	}
 }
