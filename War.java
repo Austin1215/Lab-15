@@ -11,11 +11,26 @@ public class War
 		{
 			Scanner reader = new Scanner(System.in);
 			final String menu = "Choose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT";
+			int input;
 			
-			for ()
+			do
 			{
+				input = reader.nextInt();	
 				
+				switch(input)
+				{
+					case 0:
+						
+					case 1:
+						
+					case 2:	
+						System.exit(0);
+						
+					default:
+				}
 			}
+			while(true);
+			
 		}
 	}
 	
