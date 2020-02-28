@@ -19,17 +19,23 @@ public class War
 				
 				switch(input)
 				{
-					case 0:
+					case 0: // Play
 						
-					case 1:
+						break;
 						
-					case 2:	
+					case 1: // Check Cards
+						
+						break;
+						
+					case 2:	// Quit
 						System.exit(0);
 						
-					default:
+					default: // Invalid Input
+						System.out.println("Please input 0, 1, or 2.");
+						continue;
 				}
 			}
-			while(true);
+			while(false);
 			
 		}
 	}
