@@ -4,73 +4,21 @@
 import java.util.*;
 
 public class War
-{
-	public class WarHand extends Hand
-	{	
-		private Card activeCard;
-		
-		public WarHand(String n, Deck d)
-		{
-			super(n, 26, d);
-		}
-		
-		public void play()
-		{
-			final String menu = "Choose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT";
-			
-			Scanner reader = new Scanner(System.in);
-			int input;
-			
-			do
-			{
-				input = reader.nextInt();	
-				
-				switch(input)
-				{
-					case 0: // Play
-						playWar();
-						break;
-						
-					case 1: // Check Cards
-						System.out.println(toString());
-						break;
-						
-					case 2:	// Quit
-						System.out.println("Have a nice day!");
-						System.exit(0);
-						break;
-						
-					default: // Invalid Input
-						System.out.println("Please input 0, 1, or 2.");
-						continue;
-				}
-			}
-			while(false);
-		}
-		
-		public void playWar()
-		{
-			activeCard = hand.get(0);
-			
-			System.out.println(name + " drew " + activeCard.toString());
-		}
-		
-		public Card getActiveCard()
-		{
-			return activeCard;
-		}
-	}
-	
+{	
 	public static void main(String[] args)
 	{
 		// Initialize necessary variables
 		Scanner reader = new Scanner(System.in);
 		
-		// Create Players and Deck
+		// Make deck
 		Deck warDeck = new Deck();
+		warDeck.shuffle();
+		
+		// Initialize Players
 		WarHand[] players = new WarHand[2];
 		players[0] = new WarHand("Opponent", warDeck);
-		// TODO: try-catch for valid input
+		
+		// TODO: try-catch and if statements for valid input
 		System.out.print("Please input the player\'s name: ");
 		String playerName = reader.next();
 		players[1] = new WarHand(playerName, warDeck);
@@ -78,7 +26,25 @@ public class War
 		// Play the game
 		for (int i = 0 ; players[0].size() > 0 && players[1].size() > 0 ; i++)
 		{
+			System.out.println("\n----Turn " + i + "----");
+			players[1].play();
+			players[0].playWar();
 			
+			Card c1 = players[1].getActiveCard();
+			Card c2 = players[0].getActiveCard();
+			
+			if (c1.getFaceInt() > c2.getFaceInt()) // You win
+			{
+				
+			}
+			else if (c2.getFaceInt() > c1.getFaceInt()) // Opponent wins 
+			{
+				
+			}
+			else // TIE!!!
+			{
+				
+			}
 		}
 		
 		// Declare the victor

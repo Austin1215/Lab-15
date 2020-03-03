@@ -23,6 +23,7 @@ public class Card
 	}
 	
 	private String face;
+	private int faceInt;
 	private Suit suit;
 	private boolean isPlayed = false;
 	
@@ -33,6 +34,7 @@ public class Card
 		{
 			// Face Cards
 			case 1: case 14:
+				faceInt = 14;
 				face = "A";
 				break;
 			
@@ -59,6 +61,7 @@ public class Card
 		}
 		
 		suit = s;
+		faceInt = f;
 		
 	}
 	
@@ -75,6 +78,11 @@ public class Card
 	public String getFace()
 	{
 		return face;
+	}
+	
+	public int getFaceInt()
+	{
+		return faceInt;
 	}
 	
 	public Suit getSuit()

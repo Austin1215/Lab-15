@@ -8,7 +8,7 @@ public class Hand
 	// Variables
 	protected ArrayList<Card> hand = new ArrayList<Card>(5);
 	protected Deck activeDeck;
-	private String name = "";
+	protected String name = "";
 	
 	// Constructors
 	public Hand(String name, int numberOfCards, Deck d)
@@ -22,6 +22,16 @@ public class Hand
 	}
 	
 	// Methods
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String n)
+	{
+		name = n;
+	}
+	
 	public Deck getDeck()
 	{
 		return activeDeck;
@@ -46,7 +56,7 @@ public class Hand
 		
 		if(index < 0 || index >= size())
 		{
-			String prompt = "Pick a card, any card:"
+			String prompt = "Pick a card, any card:";
 			Scanner reader = new Scanner(System.in);
 			
 			do
