@@ -14,46 +14,33 @@ public class WarHand extends Hand
 	
 	public void play()
 	{
-		final String menu = "Choose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT";
-		
-		Scanner reader = new Scanner(System.in);
-		int input;
-		
-		do
-		{
-			System.out.println("\n" + menu);
-			input = reader.nextInt();	
-			
-			switch(input)
-			{
-				case 0: // Play
-					playWar();
-					break;
-					
-				case 1: // Check Cards
-					System.out.println(toString());
-					continue;
-					
-				case 2:	// Quit
-					System.out.println("Have a nice day!");
-					System.exit(0);
-					break;
-					
-				default: // Invalid Input
-					System.out.println("Please input 0, 1, or 2.");
-					continue;
-			}
-		}
-		while(false);
+		activeCard = hand.get(0);
+		activeCard.play();
 	}
 	
-	public void playWar()
+	public void winDraw(Card c) // If you win the drawing match
 	{
-		activeCard = hand.get(0);
+		hand.add(c);
+	}
+	
+	public Card loseDraw() // If you lose the drawing match
+	{
+		return hand.remove(activeCard);
+	}
+	
+	public void tieDraw() // When there is a tied draw
+	{
+		ArrayList<Card> tempHand = new ArrayList<Card>(3);
 		
-		System.out.println(name + " drew " + activeCard.toString());
+		for (int i = 2 ; i >= 0 ; i--)
+		{
+			Card c = hand.loseDraw();
+			tempHand.add(i, c);
+		}
 		
-		hand.remove(activeCard);
+		activeCard = tempHand.get(0);
+		activeCard.play();
+		
 	}
 	
 	public Card getActiveCard()
