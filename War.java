@@ -57,7 +57,7 @@ public class War
 			while(inputBool);
 			
 			// Players draw
-			ArrayList<Card> spoils = new ArrayList<Card>(2);
+			ArrayList<Card> spoils = new ArrayList<Card>(10);
 			do
 			{
 				you.play();
@@ -89,10 +89,10 @@ public class War
 						spoilsCount = you.size();
 					}
 					
-					for (int i = 1 ; i < 3 ; i++)
-					{ // 0 (tied card), 1 , 2, 3, 4(flipped)
-						spoils.add(foe.loseDraw());
-						spoils.add(you.loseDraw());
+					for (int i = 0 ; i < spoilsCount ; i++)
+					{
+						spoils.add(foe.remove(i));
+						spoils.add(you.remove(i));
 					}
 					
 					// Draw again
@@ -101,13 +101,13 @@ public class War
 				else if (foeCardValue < youCardValue) // You win
 				{
 					System.out.printf("\n%1s > %1s :: Player wins!\n", youCard.getFace(), foeCard.getFace());
-					spoils.add(foe.loseDraw());
+					spoils.add(foe.remove());
 					you.winDraw(spoils);
 				}
 				else // Opponent wins 
 				{
 					System.out.printf("\n%1s > %1s :: Opponent wins!\n", foeCard.getFace(), youCard.getFace());
-					spoils.add(you.loseDraw());
+					spoils.add(you.remove());
 					foe.winDraw(spoils);
 				}
 			}
@@ -129,6 +129,6 @@ public class War
 			victor = you;
 		}
 		
-		System.out.println(victor.getName() + " won the War in " + turnTotal + "!");
+		System.out.println(victor.getName() + " won the War in " + turn + "!");
 	}
 }
