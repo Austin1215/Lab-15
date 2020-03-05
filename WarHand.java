@@ -23,24 +23,17 @@ public class WarHand extends Hand
 		hand.add(c);
 	}
 	
-	public Card loseDraw() // If you lose the drawing match
+	public void winDraw(Card[] cs)
 	{
-		return hand.remove(activeCard);
+		for (Card c : cs)
+		{
+			winDraw(c);
+		}
 	}
 	
-	public void tieDraw() // When there is a tied draw
+	public Card loseDraw() // If you lose the drawing match
 	{
-		ArrayList<Card> tempHand = new ArrayList<Card>(3);
-		
-		for (int i = 2 ; i >= 0 ; i--)
-		{
-			Card c = hand.loseDraw();
-			tempHand.add(i, c);
-		}
-		
-		activeCard = tempHand.get(0);
-		activeCard.play();
-		
+		return hand.remove(0);
 	}
 	
 	public Card getActiveCard()

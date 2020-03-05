@@ -15,93 +15,104 @@ public class War
 		warDeck.shuffle();
 		
 		// Initialize Players
-		WarHand[] players = new WarHand[2];
-		players[0] = new WarHand("Opponent", warDeck);
-		
-		// TODO: try-catch and if statements for valid input
-		System.out.print("Please input the player\'s name: ");
-		String playerName = reader.next();
-		players[1] = new WarHand(playerName, warDeck);
+		WarHand foe = new WarHand("Opponent", warDeck);
+		WarHand you = new WarHand("Player", warDeck);
 		
 		// Play the game
-		for (int i = 0 ; players[0].size() > 0 && players[1].size() > 0 ; i++)
+		for (int i = 0 ; foe.size() > 0 && you.size() > 0 ; i++)
 		{
 			System.out.println("\n----Turn " + i + "----");
-			// Players Draw
-			final String menu = "\nChoose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT";
 			
-			int input;
+			// Your Input
+			boolean inputBool = false; // A condition for the input
 			do
 			{
-				System.out.println(menu);
-				input = reader.nextInt();	
-			
+				System.out.println("\nChoose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT");
+				int input = reader.nextInt();
+				System.out.println();
+				
 				switch(input)
 				{
 					case 0: // Play
 						break;
 					
 					case 1: // Check Cards
-						System.out.println(players[1].toString());
-						continue;
+						System.out.println(you.toString());
+						System.out.println(foe.toString());
+						inputBool = true;
+						break;
 					
 					case 2:	// Quit
-						System.out.println("Have a nice day!");
+						System.out.println("Have a nice day!\n");
 						System.exit(0);
 						break;
 					
 					default: // Invalid Input
 						System.out.println("Please input 0, 1, or 2.");
-						continue;
+						inputBool = true;
+						break;
+				}
+			}
+			while(inputBool);
+			
+			// Players draw
+			do
+			{
+				you.play();
+				foe.play();
+			
+				Card youCard = you.getActiveCard();
+				Card foeCard = foe.getActiveCard();
+			
+				System.out.println("Opponent drew " + foeCard.toString());
+				System.out.println("Player drew " + youCard.toString());
+				
+				ArrayList<Card> spoils = new ArrayList<Card>(52);
+				int spoilCounter = 2;
+				
+				// Determine Draw Winner
+				int foeCardValue = foeCard.getFaceInt();
+				int youCardValue = youCard.getFaceInt();
+			
+				if (foeCardValue == youCardValue) // TIE!!
+				{
+					System.out.println(foeCard.getFace() + " = " + youCard.getFace() + " :: TIE!");
+			
+					// Draw the spoil cards
+					for (int i = 0 ; i < spoilCounter / 2 ; i++)
+					{
+						spoils.add(foe.loseDraw());
+						spoils.add(you.loseDraw());
+					}
+					
+					// Draw again
+					continue;
+				}
+				else if (foeCardValue < youCardValue) // You win
+				{
+					System.out.printf("\n%1s > %1s :: Player wins!\n", youCard.getFace(), foeCard.getFace());
+					you.winDraw(spoils.toArray());
+				}
+				else // Opponent wins 
+				{
+					System.out.printf("\n%1s > %1s :: Opponent wins!\n", foeCard.getFace(), youCard.getFace());
+					foe.winDraw(spoils.toArray());
 				}
 			}
 			while(false);
-			
-			players[1].play();
-			players[0].play();
-			
-			Card c0 = players[0].getActiveCard();
-			Card c1 = players[1].getActiveCard();
-			
-			System.out.printf("\n%1s drew %4s", players[0].getName(), c0.toString());
-			System.out.printf("\n%1s drew %4s", players[1].getName(), c1.toString());
-			
-			// Determine Draw Winner
-			int f0 = c0.getFaceInt();
-			int f1 = c1.getFaceInt();
-			
-			if (f0 == f1) // TIE!!!
-			{
-				System.out.println(f0 + " = " + f1);
-				 
-				
-			}
-			else // Someone Won
-			{
-				if (f0 < f1) // You win
-				{
-					System.out.printf("\n%2d > %2d :: %1s wins!", f1, f0, players[1].getName());
-					players[1].winDraw(players[0].loseDraw());
-				}
-				else if (f0 > f1) // Opponent wins 
-				{
-					System.out.printf("\n%2d > %2d :: %1s wins!", f0, f1, players[0].getName());
-					players[0].winDraw(players[1].loseDraw());
-				}
-			}
 			
 			System.out.println("\n------------------\n");
 		}
 		
 		// Declare the victor
 		WarHand victor;
-		if (players[0].size() > 0)
+		if (foe.size() > 0)
 		{
-			victor = players[0];
+			victor = foe;
 		}
 		else
 		{
-			victor = players[1];
+			victor = you;
 		}
 		
 		System.out.println(victor.getName() + " won with " + victor.size() + " cards remaining!");
