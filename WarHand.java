@@ -14,30 +14,52 @@ public class WarHand extends Hand
 	
 	public void play()
 	{
-		activeCard = hand.get(0);
+		activeCard = getCard(0);
 		activeCard.play();
 	}
 	
-	public void winDraw(Card c) // If you win the drawing match
+	public void add(Card c) // If you win the drawing match
 	{
 		hand.add(c);
 	}
 	
-	public void winDraw(Card[] cs)
+	public void add(ArrayList<Card> cs)
 	{
-		for (Card c : cs)
+		for (Card c : (Card[])cs.toArray())
 		{
-			winDraw(c);
+			add(c);
 		}
 	}
 	
-	public Card loseDraw() // If you lose the drawing match
+	public Card remove()
 	{
 		return hand.remove(0);
+	}
+	
+	public Card remove(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println("WarHand.remove() : index out of bounds : " + index);
+			return null;
+		}
+		
+		return hand.remove(index);
 	}
 	
 	public Card getActiveCard()
 	{
 		return activeCard;
+	}
+	
+	public Card getCard(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println("WarHand.getCard() : index out of bounds : " + index);
+			return null;
+		}
+		
+		return hand.get(index);
 	}
 }
