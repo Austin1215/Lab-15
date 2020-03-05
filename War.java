@@ -9,6 +9,7 @@ public class War
 	{
 		// Initialize necessary variables
 		Scanner reader = new Scanner(System.in);
+		int turn = 1;
 		
 		// Make deck
 		Deck warDeck = new Deck();
@@ -19,9 +20,9 @@ public class War
 		WarHand you = new WarHand("Player", warDeck);
 		
 		// Play the game
-		for (int i = 0 ; foe.size() > 0 && you.size() > 0 ; i++)
+		for (; foe.size() > 0 && you.size() > 0 ; turn++)
 		{
-			System.out.println("\n----Turn " + i + "----");
+			System.out.println("\n----Turn " + turn + "----");
 			
 			// Your Input
 			boolean inputBool = false; // A condition for the input
@@ -56,6 +57,7 @@ public class War
 			while(inputBool);
 			
 			// Players draw
+			ArrayList<Card> spoils = new ArrayList<Card>(2);
 			do
 			{
 				you.play();
@@ -67,9 +69,6 @@ public class War
 				System.out.println("Opponent drew " + foeCard.toString());
 				System.out.println("Player drew " + youCard.toString());
 				
-				ArrayList<Card> spoils = new ArrayList<Card>(52);
-				int spoilCounter = 2;
-				
 				// Determine Draw Winner
 				int foeCardValue = foeCard.getFaceInt();
 				int youCardValue = youCard.getFaceInt();
@@ -78,9 +77,20 @@ public class War
 				{
 					System.out.println(foeCard.getFace() + " = " + youCard.getFace() + " :: TIE!");
 			
-					// Draw the spoil cards
-					for (int i = 0 ; i < spoilCounter / 2 ; i++)
+					// Draw the spoils cards
+					int spoilsCount = 3;
+					
+					if (foe.size() < spoilCount && foe.size() <= you.size())
 					{
+						spoilsCount = foe.size();
+					}
+					else if (you.size() < spoilCount && you.size() < foe.size())
+					{
+						spoilsCount = you.size();
+					}
+					
+					for (int i = 1 ; i < 3 ; i++)
+					{ // 0 (tied card), 1 , 2, 3, 4(flipped)
 						spoils.add(foe.loseDraw());
 						spoils.add(you.loseDraw());
 					}
@@ -91,20 +101,24 @@ public class War
 				else if (foeCardValue < youCardValue) // You win
 				{
 					System.out.printf("\n%1s > %1s :: Player wins!\n", youCard.getFace(), foeCard.getFace());
-					you.winDraw(spoils.toArray());
+					spoils.add(foe.loseDraw());
+					you.winDraw(spoils);
 				}
 				else // Opponent wins 
 				{
 					System.out.printf("\n%1s > %1s :: Opponent wins!\n", foeCard.getFace(), youCard.getFace());
-					foe.winDraw(spoils.toArray());
+					spoils.add(you.loseDraw());
+					foe.winDraw(spoils);
 				}
 			}
 			while(false);
 			
-			System.out.println("\n------------------\n");
+			System.out.println("\n------------------");
 		}
 		
 		// Declare the victor
+		System.out.println("\n~~~~ VICTORY ~~~~\n");
+		
 		WarHand victor;
 		if (foe.size() > 0)
 		{
@@ -115,6 +129,6 @@ public class War
 			victor = you;
 		}
 		
-		System.out.println(victor.getName() + " won with " + victor.size() + " cards remaining!");
+		System.out.println(victor.getName() + " won the War in " + turnTotal + "!");
 	}
 }
