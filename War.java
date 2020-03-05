@@ -129,6 +129,6 @@ public class War
 			victor = you;
 		}
 		
-		System.out.println(victor.getName() + " won the War in " + turn + "!");
+		System.out.println(victor.getName() + " won the War in " + turn + " turns!");
 	}
 }
