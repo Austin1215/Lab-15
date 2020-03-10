@@ -144,10 +144,7 @@ public class Hand
 		}
 		
 		// Add # of cards to the hand
-		for (int i = 0 ; i < numberOfCards ; i++)
-		{
-			add(activeDeck.deal());
-		}
+		add(activeDeck.draw(numberOfCards));
 	}
 	
 	public void add(Card c)
