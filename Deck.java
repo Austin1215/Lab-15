@@ -10,7 +10,7 @@ public class Deck
 	// Constructor(s)
 	public Deck() // Standard Deck
 	{
-		for(Card.Suit suit : Card.Suit.values())
+		for(Suit suit : Suit.values())
 		{
 			for (int i = 1 ; i <= 13 ; i++)
 			{	
@@ -27,7 +27,7 @@ public class Deck
 	
 	public ArrayList<Card> deal(int numberOfCards)
 	{
-		if (numberOfCards > cards.size())
+		if (numberOfCards > size())
 		{
 			System.out.println("Hey! You can't do that! (There aren\'t that many cards, you greedy pig)");
 			return null;
@@ -46,7 +46,7 @@ public class Deck
 	public void shuffle()
 	{
 		Random prng = new Random(); // Pringle
-		for (int i = 0 ; i < cards.size() ; i++)
+		for (int i = 0 ; i < size() ; i++)
 		{
 			// Making sure the random number is not the same as the current index
 			int n;
