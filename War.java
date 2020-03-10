@@ -80,16 +80,16 @@ public class War
 					// Draw the spoils cards
 					int spoilsCount = 3; // Defaults to three spoils cards
 					
-					if (foe.size() < spoilsCount && foe.size() <= you.size())
+					if (foe.size() <= spoilsCount && foe.size() <= you.size())
 					{
 						spoilsCount = foe.size();
 					}
-					else if (you.size() < spoilsCount && you.size() < foe.size())
+					else if (you.size() <= spoilsCount && you.size() < foe.size())
 					{
 						spoilsCount = you.size();
 					}
 					
-					for (int i = 0 ; i < spoilsCount ; i++)
+					for (int i = 0 ; i <= spoilsCount ; i++) // '<=' includes current card
 					{
 						spoils.add(foe.remove(i));
 						spoils.add(you.remove(i));
