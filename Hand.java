@@ -138,7 +138,7 @@ public class Hand
 		{
 			errorMessage += "don't use draw if requesting 0 cards";
 		}
-		else if (numberOfCards > hand.size())
+		else if (numberOfCards > size())
 		{
 			errorMessage += "active deck only has (" + activeDeck.size() + ") cards";
 		}
@@ -146,8 +146,37 @@ public class Hand
 		// Add # of cards to the hand
 		for (int i = 0 ; i < numberOfCards ; i++)
 		{
-			hand.add(activeDeck.deal());
+			add(activeDeck.deal());
 		}
+	}
+	
+	public void add(Card c)
+	{
+		hand.add(c);
+	}
+	
+	public void add(ArrayList<Card> cs)
+	{
+		for (Card c : (Card[])cs.toArray())
+		{
+			add(c);
+		}
+	}
+	
+	public Card remove()
+	{
+		return hand.remove(0);
+	}
+	
+	public Card remove(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println(".remove() : index out of bounds : " + index);
+			return null;
+		}
+		
+		return hand.remove(index);
 	}
 	
 	public int size()
