@@ -53,7 +53,7 @@ public class Deck
 
 			do 
 			{ 
-				n = prng.nextInt(cards.size());
+				n = prng.nextInt(size());
 			} 
 			while (n == i);
 
