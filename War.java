@@ -102,13 +102,13 @@ public class War
 				{
 					System.out.printf("\n%1s > %1s :: Player wins!\n", youCard.getFace(), foeCard.getFace());
 					spoils.add(foe.remove());
-					you.winDraw(spoils);
+					you.add(spoils);
 				}
 				else // Opponent wins 
 				{
 					System.out.printf("\n%1s > %1s :: Opponent wins!\n", foeCard.getFace(), youCard.getFace());
 					spoils.add(you.remove());
-					foe.winDraw(spoils);
+					foe.add(spoils);
 				}
 			}
 			while(false);
