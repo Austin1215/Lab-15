@@ -9,7 +9,7 @@ public class War
 	{
 		// Initialize necessary variables
 		Scanner reader = new Scanner(System.in);
-		int turn = 1;
+		int turn;
 		
 		// Make deck
 		Deck warDeck = new Deck();
@@ -20,7 +20,7 @@ public class War
 		WarHand you = new WarHand("Player", warDeck);
 		
 		// Play the game
-		for (; foe.size() > 0 && you.size() > 0 ; turn++)
+		for (turn = 1; foe.size() > 0 && you.size() > 0 ; turn++)
 		{
 			System.out.println("\n----Turn " + turn + "----");
 			
@@ -60,11 +60,11 @@ public class War
 			ArrayList<Card> spoils = new ArrayList<Card>(10);
 			do
 			{
-				you.play();
 				foe.play();
-			
-				Card youCard = you.getActiveCard();
+				you.play();
+				
 				Card foeCard = foe.getActiveCard();
+				Card youCard = you.getActiveCard();
 			
 				System.out.println("Opponent drew " + foeCard.toString());
 				System.out.println("Player drew " + youCard.toString());
@@ -78,13 +78,13 @@ public class War
 					System.out.println(foeCard.getFace() + " = " + youCard.getFace() + " :: TIE!");
 			
 					// Draw the spoils cards
-					int spoilsCount = 3;
+					int spoilsCount = 3; // Defaults to three spoils cards
 					
-					if (foe.size() < spoilCount && foe.size() <= you.size())
+					if (foe.size() < spoilsCount && foe.size() <= you.size())
 					{
 						spoilsCount = foe.size();
 					}
-					else if (you.size() < spoilCount && you.size() < foe.size())
+					else if (you.size() < spoilsCount && you.size() < foe.size())
 					{
 						spoilsCount = you.size();
 					}
