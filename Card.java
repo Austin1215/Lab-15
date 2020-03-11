@@ -17,7 +17,6 @@ public class Card
 		{
 			// Face Cards
 			case 1: case 14:
-				faceInt = 14;
 				face = "A";
 				break;
 			
@@ -44,8 +43,9 @@ public class Card
 		}
 		
 		suit = s;
-		faceInt = f;
-		
+
+		if (f == 1) faceInt = 14;
+		else 		faceInt = f;
 	}
 	
 	public void play()

@@ -44,10 +44,10 @@ public class Hand
 	
 	public void play()
 	{
-		// This method should be overwritten by a sub-class.
+		// This method will probably be overwritten by a sub-class.
 		// However, hand is not abstract, and I don't want to make it so
 		// if all that will be abstract is this one method.
-		play(-1); 
+		hand.get(0).play();
 	}
 	
 	public void play(int index)
@@ -144,7 +144,7 @@ public class Hand
 		}
 		
 		// Add # of cards to the hand
-		add(activeDeck.draw(numberOfCards));
+		add(activeDeck.deal(numberOfCards));
 	}
 	
 	public void add(Card c)
@@ -154,9 +154,9 @@ public class Hand
 	
 	public void add(ArrayList<Card> cs)
 	{
-		for (Card c : (Card[])cs.toArray())
+		for (Object c : cs.toArray())
 		{
-			add(c);
+			add((Card)c);
 		}
 	}
 	
@@ -175,7 +175,18 @@ public class Hand
 		
 		return hand.remove(index);
 	}
-	
+
+	public Card get(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println("getCard() : index out of bounds : " + index);
+			return null;
+		}
+
+		return hand.get(index);
+	}
+
 	public int size()
 	{
 		return hand.size();

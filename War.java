@@ -1,132 +1,169 @@
 // Lab 15: War
 // Justin Varga
 
+import javax.swing.*;
 import java.util.*;
 
 public class War
-{	
-	public static void main(String[] args)
+{
+	public static void main(String[] args) throws InterruptedException
 	{
 		// Initialize necessary variables
 		Scanner reader = new Scanner(System.in);
 		int turn;
-		
+		boolean autorun = false;
+		final int MAX_TURNS = 10000;
+
 		// Make deck
 		Deck warDeck = new Deck();
 		warDeck.shuffle();
 		
 		// Initialize Players
-		WarHand foe = new WarHand("Opponent", warDeck);
-		WarHand you = new WarHand("Player", warDeck);
+		Hand foe = new Hand("Opponent", 26, warDeck);
+		Hand you = new Hand("Player", 26, warDeck);
 		
 		// Play the game
-		for (turn = 1; foe.size() > 0 && you.size() > 0 ; turn++)
+		for (turn = 1; foe.size() > 0 && you.size() > 0 && turn <= MAX_TURNS ; turn++)
 		{
 			System.out.println("\n----Turn " + turn + "----");
 			
-			// Your Input
-			boolean inputBool = false; // A condition for the input
+			// Player Input
 			do
 			{
-				System.out.println("\nChoose an option:\n[0]: Play\n[1]: Check Cards\n[2]: QUIT");
+				if (autorun)
+				{
+					System.out.println(you.toString());
+					System.out.println(foe.toString());
+					break;
+				}
+
+				System.out.println("[0]: Play\n[1]: Check Cards\n[2]: Enable Auto-Run (Can not be undone!)\n[3]: QUIT");
 				int input = reader.nextInt();
+
 				System.out.println();
-				
+
+				boolean again;
+
 				switch(input)
 				{
+					case 2: // Enable Auto-Run
+						autorun = true;
+
 					case 0: // Play
+						again = false;
 						break;
 					
 					case 1: // Check Cards
 						System.out.println(you.toString());
 						System.out.println(foe.toString());
-						inputBool = true;
+						again = true;
 						break;
-					
-					case 2:	// Quit
+
+					case 3: // QUIT
 						System.out.println("Have a nice day!\n");
 						System.exit(0);
+						again = false;
 						break;
-					
+
 					default: // Invalid Input
-						System.out.println("Please input 0, 1, or 2.");
-						inputBool = true;
+						System.out.println("Please input 0, 1, 2, or 3.");
+						again = true;
 						break;
 				}
+				if (!again) break;
 			}
-			while(inputBool);
+			while(true);
 			
 			// Players draw
 			ArrayList<Card> spoils = new ArrayList<Card>(10);
 			do
 			{
-				foe.play();
 				you.play();
-				
-				Card foeCard = foe.getActiveCard();
-				Card youCard = you.getActiveCard();
-			
-				System.out.println("Opponent drew " + foeCard.toString());
+				foe.play();
+
+				Card youCard = you.remove();
+				Card foeCard = foe.remove();
+
+				spoils.add(youCard);
+				spoils.add(foeCard);
+
 				System.out.println("Player drew " + youCard.toString());
+				System.out.println("Opponent drew " + foeCard.toString());
 				
 				// Determine Draw Winner
-				int foeCardValue = foeCard.getFaceInt();
+				String youOutcome = "Player's " + youCard.toString();
+				String foeOutcome = "Opponent's " + foeCard.toString();
+
 				int youCardValue = youCard.getFaceInt();
+				int foeCardValue = foeCard.getFaceInt();
 			
 				if (foeCardValue == youCardValue) // TIE!!
 				{
-					System.out.println(foeCard.getFace() + " = " + youCard.getFace() + " :: TIE!");
+					System.out.println(youOutcome + " ties " + foeOutcome);
 			
-					// Draw the spoils cards
+					// Make sure both sides have enough cards to war with
 					int spoilsCount = 3; // Defaults to three spoils cards
 					
-					if (foe.size() <= spoilsCount && foe.size() <= you.size())
+					if (foe.size() < spoilsCount && foe.size() <= you.size())
 					{
 						spoilsCount = foe.size();
 					}
-					else if (you.size() <= spoilsCount && you.size() < foe.size())
+					else if (you.size() < spoilsCount && you.size() < foe.size())
 					{
 						spoilsCount = you.size();
 					}
-					
-					for (int i = 0 ; i <= spoilsCount ; i++) // '<=' includes current card
+
+					if (spoilsCount == 0) continue;
+
+					// Add to the spoils and provide a message
+					String cardBlanks = "";
+
+					for (int i = 0 ; i < spoilsCount ; i++)
 					{
-						spoils.add(foe.remove(i));
-						spoils.add(you.remove(i));
+						cardBlanks += "*** ";
+
+						spoils.add(foe.remove());
+						spoils.add(you.remove());
 					}
-					
-					// Draw again
-					continue;
+
+					System.out.println(cardBlanks + "\n" + cardBlanks);
 				}
-				else if (foeCardValue < youCardValue) // You win
+				else if (youCardValue > foeCardValue) // You win
 				{
-					System.out.printf("\n%1s > %1s :: Player wins!\n", youCard.getFace(), foeCard.getFace());
-					spoils.add(foe.remove());
+					System.out.println(youOutcome + " beats " + foeOutcome);
+					System.out.println("Player wins!");
 					you.add(spoils);
+					break;
 				}
-				else // Opponent wins 
+				else // Opponent wins
 				{
-					System.out.printf("\n%1s > %1s :: Opponent wins!\n", foeCard.getFace(), youCard.getFace());
-					spoils.add(you.remove());
+					System.out.println(foeOutcome + " beats " + youOutcome);
+					System.out.println("Opponent wins!");
 					foe.add(spoils);
+					break;
 				}
 			}
-			while(false);
-			
-			System.out.println("\n------------------");
+			while(true);
+
+			System.out.println("------------------");
 		}
 		
 		// Declare the victor
 		System.out.println("\n~~~~ VICTORY ~~~~\n");
 		
-		WarHand victor;
-		if (foe.size() > 0)
+		Hand victor;
+		if (foe.size() > you.size())
 		{
 			victor = foe;
 		}
-		else
+		else if (foe.size() < you.size())
 		{
 			victor = you;
+		}
+		else
+		{
+			System.out.println("Tied Game!");
+			return;
 		}
 		
 		System.out.println(victor.getName() + " won the War in " + turn + " turns!");

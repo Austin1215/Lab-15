@@ -32,12 +32,12 @@ public class Deck
 			System.out.println("Hey! You can't do that! (There aren\'t that many cards, you greedy pig)");
 			return null;
 		}
-		
+
 		ArrayList<Card> dealtCards = new ArrayList<Card>(numberOfCards);
-		
+
 		for (int i = 0 ; i < numberOfCards ; i++)
 		{
-			dealtCards.add(cards.remove(i));
+			dealtCards.add(cards.remove(0));
 		}
 		
 		return dealtCards;
