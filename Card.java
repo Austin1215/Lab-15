@@ -5,24 +5,8 @@ import java.util.*;
 
 public class Card
 {	
-	public enum Suit
-	{
-		CLUBS("clubs", '\u2660'), 
-		HEARTS("hearts", '\u2665'), 
-		DIAMONDS("diamonds", '\u2666'), 
-		SPADES("spades", '\u2663');
-		
-		public final String string;
-		public final char character;
-		
-		private Suit(String s, char c)
-		{
-			string = s;
-			character = c;
-		}
-	}
-	
 	private String face;
+	private int faceInt;
 	private Suit suit;
 	private boolean isPlayed = false;
 	
@@ -59,7 +43,9 @@ public class Card
 		}
 		
 		suit = s;
-		
+
+		if (f == 1) faceInt = 14;
+		else 		faceInt = f;
 	}
 	
 	public void play()
@@ -75,6 +61,11 @@ public class Card
 	public String getFace()
 	{
 		return face;
+	}
+	
+	public int getFaceInt()
+	{
+		return faceInt;
 	}
 	
 	public Suit getSuit()

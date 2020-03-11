@@ -6,9 +6,9 @@ import java.util.*;
 public class Hand
 {
 	// Variables
-	public ArrayList<Card> hand = new ArrayList<Card>(5);
-	private Deck activeDeck;
-	private String name = "";
+	protected ArrayList<Card> hand = new ArrayList<Card>(5);
+	protected Deck activeDeck;
+	protected String name = "";
 	
 	// Constructors
 	public Hand(String name, int numberOfCards, Deck d)
@@ -22,6 +22,16 @@ public class Hand
 	}
 	
 	// Methods
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String n)
+	{
+		name = n;
+	}
+	
 	public Deck getDeck()
 	{
 		return activeDeck;
@@ -34,42 +44,54 @@ public class Hand
 	
 	public void play()
 	{
-		Scanner reader = new Scanner(System.in);
+		// This method will probably be overwritten by a sub-class.
+		// However, hand is not abstract, and I don't want to make it so
+		// if all that will be abstract is this one method.
+		hand.get(0).play();
+	}
+	
+	public void play(int index)
+	{
+		int cardIndex = index;
 		
-		int cardIndex = -1;
-		
-		do
+		if(index < 0 || index >= size())
 		{
-			System.out.println("Pick a card, any card:");
-				
-			for (int i = 0 ; i < hand.size() ; i++)
-				System.out.printf("[%1d]:\t%4s\n", i, hand.get(i));
+			String prompt = "Pick a card, any card:";
+			Scanner reader = new Scanner(System.in);
 			
-			try
+			do
 			{
-				cardIndex = reader.nextInt();
-				
-				if (hand.get(cardIndex).getPlayed())
+				System.out.println(prompt);
+
+				for (int i = 0 ; i < hand.size() ; i++)
+					System.out.printf("[%1d]:\t%4s\n", i, hand.get(i));
+
+				try
 				{
-					throw new Error();
+					cardIndex = reader.nextInt();
+
+					if (hand.get(cardIndex).getPlayed())
+					{
+						throw new Error();
+					}
 				}
+				catch(Exception err)
+				{
+					prompt = "Card does not exist at that index!\nPick a different card:";
+					continue;
+				}
+				catch(Error err)
+				{
+					prompt = "Card already in play!\nPick a different card:";
+					continue;
+				}
+
+				break;
 			}
-			catch(Exception err)
-			{
-				System.out.println("Card does not exist at that index!\n");
-				continue;
-			}
-			catch(Error err)
-			{
-				System.out.println("Card already in play!\n");
-				continue;
-			}
-			
-			hand.get(cardIndex).play();
-			break;
+			while(true);
 		}
-		while(true);
 		
+		hand.get(cardIndex).play();
 	}
 	
 	public String showHand()
@@ -98,9 +120,9 @@ public class Hand
 		return handString;
 	}
 	
-	public void draw(Deck deck)
+	public void draw()
 	{
-		// Draw one card
+		// Draws one card
 		draw(1);
 	}
 	
@@ -108,17 +130,63 @@ public class Hand
 	{
 		// Handle weird numbers
 		String errorMessage = String.format(" attempted draw of %3d cards :: ",numberOfCards);
-		if (numberOfCards < 0)						errorMessage += "can't draw a negative number";
-		else if (numberOfCards == 0)				errorMessage += "don't use draw if requesting 0 cards";
-		else if (numberOfCards > hand.size())		errorMessage += "active deck only has (" + activeDeck.size() + ") cards";
+		if (numberOfCards < 0)
+		{
+			errorMessage += "can't draw a negative number";
+		}
+		else if (numberOfCards == 0)
+		{
+			errorMessage += "don't use draw if requesting 0 cards";
+		}
+		else if (numberOfCards > size())
+		{
+			errorMessage += "active deck only has (" + activeDeck.size() + ") cards";
+		}
 		
 		// Add # of cards to the hand
-		for (int i = 0 ; i < numberOfCards ; i++)
+		add(activeDeck.deal(numberOfCards));
+	}
+	
+	public void add(Card c)
+	{
+		hand.add(c);
+	}
+	
+	public void add(ArrayList<Card> cs)
+	{
+		for (Object c : cs.toArray())
 		{
-			hand.add(activeDeck.deal());
+			add((Card)c);
 		}
 	}
 	
+	public Card remove()
+	{
+		return hand.remove(0);
+	}
+	
+	public Card remove(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println(".remove() : index out of bounds : " + index);
+			return null;
+		}
+		
+		return hand.remove(index);
+	}
+
+	public Card get(int index)
+	{
+		if (index > size() || index < 0)
+		{
+			System.out.println("getCard() : index out of bounds : " + index);
+			return null;
+		}
+
+		return hand.get(index);
+	}
+
 	public int size()
 	{
 		return hand.size();
